@@ -10,18 +10,23 @@ class Clinica:
 #Metodo para agregar a enfermeras a la clinica con sobrecarga de metodos
     def agregar_enfermera(self, *enfermeras):
         for enfermera in enfermeras:
-            if isinstance(enfermera, Enfermera):
-                self.enfermeras.append(enfermera)
-            else:
+            try:
+                if isinstance(enfermera, Enfermera):
+                    self.enfermeras.append(enfermera)
+            except TypeError:
                 print("Error: El objeto no es de la clase Enfermera")
+
 
 
 #Metodo para agregar al doctor a base de datos
     def agregar_medico(self, medico):
-        if isinstance(medico, Medico):
-            self.medicos.append(medico)
-        else:
-            print("Error: El objeto no es de la clase Medico")
+        try:
+            if isinstance(medico, Medico):
+                self.medicos.append(medico)
+        except TypeError:
+                print("Error: El objeto no es de la clase Medico")
+
+
 
 #Metodo para agregar a paciente y traerlo de vuelta cuando el doctor lo llame a atenderse
     def agregar_paciente(self, paciente):
@@ -29,16 +34,19 @@ class Clinica:
         
 
     def obtener_paciente(self, id_paciente):
-        for paciente in self.pacientes:
-            if paciente.id == id_paciente:
-                return paciente
-        return None
+        try:
+            for paciente in self.pacientes:
+                if paciente.id == id_paciente:
+                    return paciente
+        except TypeError:
+            print("Error: el objeto no pertenece a la clase Paciente")
+            return None
     
 
 
 
 
-
+#-----------------------------------------------------------------------------------------------------------------------------------
 
 
 #Clase Paciente
@@ -66,22 +74,32 @@ class Paciente:
         else:
             print("Error: El objeto no es de la clase Enfermera")
 
+
+
+
 #Metodo para calificar el servicio
     def calificar_servicio(self, calificacion):
-        if not (1 <= calificacion <= 5):
-            print("Error: La calificación debe ser un número entero entre 1 y 5.")
-        else:
-            self.calificacion = calificacion
-            print(f"Gracias por su calificación, {self.nombre}. Para nuestra institucion su opinion es importante")
+        try:
+            if not (1 <= calificacion <= 5):
+                raise ValueError("Error: La calificación debe ser un número entero entre 1 y 5.")
+        except ValueError as error:
+            print(error)
+        finally:
+            print(f"Gracias por su calificación, {self.nombre}. Para nuestra institución su opinión es importante")
+
+
 
 #Metodo para solicitar atencion especial
     def solicitar_atencion_especial(self):
-            nivel_prioridad = int(input("Ingrese el nivel de prioridad de la solicitud (1 a 10), siendo 1 muy urgente y 10 poco urgente: "))
-            if nivel_prioridad < 1 or nivel_prioridad > 10:
-                print("Error: El nivel de prioridad debe estar entre 1 y 10.")
-                return
-
-            print(f"El paciente {self.nombre} solicita atención especial con nivel de prioridad {nivel_prioridad}")
+            try:
+                nivel_prioridad = int(input("Ingrese el nivel de prioridad de la solicitud (1 a 10), siendo 1 muy urgente y 10 poco urgente: "))
+                if nivel_prioridad < 1 or nivel_prioridad > 10:
+                    raise TypeError
+            except TypeError as error:
+                    print("Error: El nivel de prioridad debe estar entre 1 y 10.")
+                    return
+            finally:
+                print(f"El paciente {self.nombre} solicita atención especial con nivel de prioridad {nivel_prioridad}")
 
 
 
@@ -164,9 +182,12 @@ class Enfermera:
 
 #Metodo para registrar medicamentos
     def registrar_medicacion(self, paciente):
-        medicamento = input("Ingrese el nombre del medicamento: ")
-        dosis = input("Ingrese la dosis: ")
-        print(f"La enfermera {self.nombre} ha registrado la medicación para el paciente {paciente.nombre}: {medicamento}, {dosis}.")
+        try:
+            medicamento = input("Ingrese el nombre del medicamento: ")
+            dosis = input("Ingrese la dosis: ")
+            print(f"La enfermera {self.nombre} ha registrado la medicación para el paciente {paciente.nombre}: {medicamento}, {dosis}.")
+        except IndexError:
+            print("Error: No se pudo acceder al nombre del paciente.")
 
 
 #Metodo para llamar a medico
@@ -204,7 +225,10 @@ e02 = Enfermera("e02", "Claudia Martinez", "e02")
 e03 = Enfermera("e03", "Macarena Tapia", "e03")
 clinica.agregar_enfermera(e03, e01, e02)
 
-#Prueba metodo tomar_paciente
+
+
+
+"""#Prueba metodo tomar_paciente
 m01.tomar_paciente(1)
 m02.tomar_paciente(1)
 
@@ -217,21 +241,15 @@ m01.dar_descanso(1, 11)
 
 #prueba para dar de alta a un paciente
 m01.dar_alta(1)
-
+"""
 #pruebas clase paciente
 p01.quejarse()
 p01.llamar_enfermera(e01)
-p01.calificar_servicio(5)
+p01.calificar_servicio(9)
 p01.solicitar_atencion_especial()
-
+"""
 #pruebas clase enfermera
 e01.tomar_signos_vitales(p01)
 e01.registrar_medicacion(p01)
 e01.llamar_medico()
-e01.enviar_reporte_medico(p01)
-
-
-
-
-
-
+e01.enviar_reporte_medico(p01)"""
